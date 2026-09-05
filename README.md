@@ -1,7 +1,7 @@
 # Windows Server 2019 Full Lab — Active Directory, GPO, DHCP, DNS & File Services
 
 A hands-on home lab covering the core responsibilities of a Windows Server / Active Directory administrator: forest and domain setup, OU and group design, Group Policy hardening, DHCP failover, DNS load balancing, file server permissions with quotas and file screening, and automated backups.
-
+![Image Alt](Snapshots/intro.png)
 ---
 
 ## Lab Topology
@@ -124,7 +124,7 @@ Adjust these to match your own environment if different — they're referenced c
 4. Run `gpupdate /force` on the DC to apply immediately.
 
 >   
-![][image2]  
+![Image Alt](Snapshots/2.PNG)  
 ![Default Domain Policy password settings]()
 
 ---
@@ -142,7 +142,7 @@ Adjust these to match your own environment if different — they're referenced c
    - **Reset account lockout counter after:** `60 minutes` (or less — must be ≤ lockout duration)  
 3. `gpupdate /force` to apply.
 
-![][image3]  
+![Image Alt](Snapshots/3.PNG)
 ![Account lockout policy settings]()
 
 ---
@@ -160,8 +160,8 @@ Adjust these to match your own environment if different — they're referenced c
 5. Under *Computer Configuration → Preferences → Control Panel Settings → Local Users and Groups*, add the relevant group (e.g. `G_IT`, or `Domain Users` if everyone should have access) to the local **Remote Desktop Users** group on target machines.  
 6. `gpupdate /force`, then verify with `gpresult /r` and a test RDP connection.
 
-![][image4]![][image5]  
-![RDP GPO setting enabled]()![][image6]
+![Image Alt](Snapshots/4.PNG)![Image Alt](Snapshots/4.5.PNG)
+![RDP GPO setting enabled]()![Image Alt](Snapshots/4.7.PNG)
 
 ---
 
@@ -196,7 +196,7 @@ Adjust these to match your own environment if different — they're referenced c
 
 >   
 >   
-![][image7]![][image8]![][image9]  
+![Image Alt](Snapshots/5.PNG)![Image Alt](Snapshots/5.5.PNG)![Image Alt](Snapshots/5.9.PNG)
 ![Restricted GPO settings applied]()
 
 ---
@@ -222,7 +222,7 @@ Adjust these to match your own environment if different — they're referenced c
 7. Activate the scope.  
    
 
-![][image10]  
+![Image Alt](Snapshots/6.PNG)
 ![DHCP scope configuration]()
 
 ---
@@ -264,7 +264,8 @@ Install-WindowsFeature Web-Server \-IncludeManagementTools
 
 Verify from another machine via `http://192.168.1.3`.
 
-![][image11]![Default IIS page on both servers]()
+![Default IIS page on both servers]()
+![Image Alt](Snapshots/7.PNG)
 
 ---
 
@@ -287,7 +288,8 @@ Verify from another machine via `http://192.168.1.3`.
 >   
 > **Note:** This is DNS round robin, not true health-checked load balancing — if one server goes down, DNS will still hand out its IP part of the time.
 
-![DNS round robin records for www.final.local]()![][image12]
+![DNS round robin records for www.final.local]()
+![Image Alt](Snapshots/8.PNG)
 
 ---
 
@@ -304,9 +306,9 @@ Verify from another machine via `http://192.168.1.3`.
 5. In FSRM → *File Screening Management → File Screens* → *Create File Screen* on each folder path, **Active screening**, blocking the built-in **Audio and Video Files** and **Executable Files** groups.  
 6. Test as a Dev/HR user: create a file (✅), edit it (✅), delete it (❌ blocked), copy in an `.mp3`/`.exe` (❌ blocked immediately).
 
-![][image13]  
+![Image Alt](Snapshots/9.PNG)
 ![NTFS Deny-Delete permission and FSRM file screen]()  
-![][image14]  
+![Image Alt](Snapshots/11.PNG)
 ---
 
 ## 14\. Mapped Network Drive for Dev and HR
@@ -361,7 +363,8 @@ Verify from another machine via `http://192.168.1.3`.
      
    Enable-ADOptionalFeature \-Identity "Recycle Bin Feature" \-Scope ForestOrConfigurationSet \-Target "final.local"
 
-![AD Recycle Bin enabled in ADAC]()![][image16]
+![AD Recycle Bin enabled in ADAC]()
+![Image Alt](Snapshots/13.PNG)
 
 ---
 
@@ -379,8 +382,7 @@ Verify from another machine via `http://192.168.1.3`.
 4. Restart when prompted, then log in with a domain account to confirm.
 
 ![Client PC joined to FINAL.LOCAL]()  
-![][image17]
-
+![Image Alt](Snapshots/14.PNG)
 ---
 
 ## 20\. Daily Full Server Backup to ADC
@@ -403,7 +405,7 @@ Verify from another machine via `http://192.168.1.3`.
      
 7. Complete the wizard and verify the first scheduled run completes successfully (check *Windows Server Backup → Status*, or Event Viewer).
 
-![][image18]  
+![Image Alt](Snapshots/12.PNG)
 ![Windows Server Backup schedule configuration]()
 
 ---
