@@ -40,14 +40,14 @@ Adjust these to match your own environment if different — they're referenced c
 7. [Allow Remote Assistance with IT as Helpers](#7.-allow-remote-assistance-with-it-as-helpers)  
 8. [Prohibit External Storage, Task Manager, and Control Panel](#8.-prohibit-external-storage,-task-manager,-and-control-panel)  
 9. [Create the DHCP Scope](#9.-create-the-dhcp-scope)  
-10. [Install Web Server (IIS) on PDC and Core](#11.-install-web-server-\(iis\)-on-pdc-and-core)  
-11. [DNS Load Balancing for www.final.local](#12-dns-load-balancing-for-wwwfinallocal)  
-12. [Shared Folder for Dev & HR — Create/Edit, No Delete, File Screening](#13-shared-folder-for-dev--hr--createedit-no-delete-file-screening)  
-13. [Mapped Network Drive for Dev and HR](#14.-mapped-network-drive-for-dev-and-hr)  
-14. [Mapped Network Drive for Public Folder with Quota](#15.-mapped-network-drive-for-public-folder-with-quota)  
-15. [Enable Active Directory Recycle Bin](#16.-enable-active-directory-recycle-bin)  
-16. [Join a Client Machine to the Domain](#17.-join-a-client-machine-to-the-domain)  
-17. [Daily Full Server Backup to ADC](#20.-daily-full-server-backup-to-adc)
+10. [Install Web Server (IIS) on PDC and Core](#10.-install-web-server-\(iis\)-on-pdc-and-core)
+11. [DNS Load Balancing for www.final.local](11\.-DNS-Load-Balancing-for-[www.final.local](http://www.final.local))
+12. [Shared Folder for Dev & HR — Create/Edit, No Delete, File Screening](#11-shared-folder-for-dev--hr--createedit-no-delete-file-screening)  
+13. [Mapped Network Drive for Dev and HR](#12.-mapped-network-drive-for-dev-and-hr)  
+14. [Mapped Network Drive for Public Folder with Quota](#13.-mapped-network-drive-for-public-folder-with-quota)  
+15. [Enable Active Directory Recycle Bin](#14.-enable-active-directory-recycle-bin)  
+16. [Join a Client Machine to the Domain](#15.-join-a-client-machine-to-the-domain)  
+17. [Daily Full Server Backup to ADC](#16.-daily-full-server-backup-to-adc)
 
 ---
 
@@ -73,8 +73,6 @@ Adjust these to match your own environment if different — they're referenced c
      
 7. Review and install. The server reboots automatically.
 
-![Promoting the server to a Domain Controller]()
-
 ---
 
 ## 2\. Create OUs for Each Department
@@ -88,7 +86,7 @@ Adjust these to match your own environment if different — they're referenced c
 2. Right-click the domain root `FINAL.LOCAL` → *New* → *Organizational Unit*.  
      
 3. Create four OUs: `HR`, `Sales`, `Dev`, `IT`.  
-4. Leave **"Protect container from accidental deletion"** checked (default, recommended).![Organizational Units created in ADUC]()
+4. Leave **"Protect container from accidental deletion"** checked (default, recommended).
 
 ---
 
@@ -103,8 +101,6 @@ Adjust these to match your own environment if different — they're referenced c
 2. Right-click the OU → *New* → *Group* → create a **Global Security Group** named `G_HR`, `G_Sales`, `G_Dev`, `G_IT` respectively.  
 3. Add each department's users as members of its matching group (double-click the group → *Members* tab → *Add*).  
    
-
-![Users and groups inside the HR OU]()  
 ![Image Alt](Snapshots/1.PNG)
 ---
 
@@ -197,7 +193,6 @@ Adjust these to match your own environment if different — they're referenced c
 >   
 >   
 ![Image Alt](Snapshots/5.PNG)![Image Alt](Snapshots/5.5.PNG)![Image Alt](Snapshots/5.9.PNG)
-![Restricted GPO settings applied]()
 
 ---
 
@@ -223,11 +218,10 @@ Adjust these to match your own environment if different — they're referenced c
    
 
 ![Image Alt](Snapshots/6.PNG)
-![DHCP scope configuration]()
 
 ---
 
-## 10\. Configure DHCP Failover and Promote ADC
+ Configure DHCP Failover and Promote ADC
 
 **Goal:** A second server, **ADC** (Server Core, `192.168.1.3`), becomes an Additional Domain Controller and DHCP failover partner.
 
@@ -245,11 +239,10 @@ Adjust these to match your own environment if different — they're referenced c
 5. Choose **Load Balance** or **Hot Standby** mode depending on your intended failover behavior, and set a shared secret.  
 6. Verify replication of the scope to ADC in the DHCP console.
 
-![DHCP failover configuration wizard]()
 
 ---
 
-## 11\. Install Web Server (IIS) on PDC and Core
+## 10\. Install Web Server (IIS) on PDC and Core
 
 **Goal:** Both PDC and ADC (Core) serve the default IIS landing page.
 
@@ -264,12 +257,11 @@ Install-WindowsFeature Web-Server \-IncludeManagementTools
 
 Verify from another machine via `http://192.168.1.3`.
 
-![Default IIS page on both servers]()
 ![Image Alt](Snapshots/7.PNG)
 
 ---
 
-## 12\. DNS Load Balancing for [www.final.local](http://www.final.local)
+## 11\. DNS Load Balancing for [www.final.local](http://www.final.local)
 
 **Goal:** `www.final.local` resolves round-robin between `192.168.1.2` and `192.168.1.3`.
 
@@ -288,12 +280,11 @@ Verify from another machine via `http://192.168.1.3`.
 >   
 > **Note:** This is DNS round robin, not true health-checked load balancing — if one server goes down, DNS will still hand out its IP part of the time.
 
-![DNS round robin records for www.final.local]()
 ![Image Alt](Snapshots/8.PNG)
 
 ---
 
-## 13\. Shared Folder for Dev & HR — Create/Edit, No Delete, File Screening
+## 12\. Shared Folder for Dev & HR — Create/Edit, No Delete, File Screening
 
 **Goal:** Dev and HR can create and edit files in their shared folders but never delete, and audio/video/executable files are blocked outright.
 
@@ -307,11 +298,10 @@ Verify from another machine via `http://192.168.1.3`.
 6. Test as a Dev/HR user: create a file (✅), edit it (✅), delete it (❌ blocked), copy in an `.mp3`/`.exe` (❌ blocked immediately).
 
 ![Image Alt](Snapshots/9.PNG)
-![NTFS Deny-Delete permission and FSRM file screen]()  
 ![Image Alt](Snapshots/11.PNG)
 ---
 
-## 14\. Mapped Network Drive for Dev and HR
+## 13\. Mapped Network Drive for Dev and HR
 
 **Goal:** Dev and HR each get their shared folder automatically mapped to a drive letter at logon.
 
@@ -324,11 +314,10 @@ Verify from another machine via `http://192.168.1.3`.
 5. Under the *Common* tab, use **Item-level targeting** to scope each mapping to its respective security group so Dev users only get the Dev drive and vice versa.  
 6. `gpupdate /force` and log off/on to test.
 
-![Group Policy Drive Maps preference]()
 
 ---
 
-## 15\. Mapped Network Drive for Public Folder with Quota
+## 14\. Mapped Network Drive for Public Folder with Quota
 
 **Goal:** All domain users get a mapped public drive, editable by everyone, capped at 2 GB per user.
 
@@ -339,15 +328,9 @@ Verify from another machine via `http://192.168.1.3`.
 3.  create a quota on `D:\Shares\Public` using the hard quota of 2 GB with **"Auto apply template to subfolders"** if each user gets their own subfolder, or a single 2 GB hard quota on the folder if it's shared capacity.  
 4. Test by copying files as a standard user until the quota blocks further writes.
 
-![FSRM quota configuration on the Public share]()![][image15]
-
 ---
 
-![Printer availability time restriction]()
-
----
-
-## 16\. Enable Active Directory Recycle Bin
+## 15\. Enable Active Directory Recycle Bin
 
 **Goal:** Allow recovery of accidentally deleted AD objects.
 
@@ -363,14 +346,13 @@ Verify from another machine via `http://192.168.1.3`.
      
    Enable-ADOptionalFeature \-Identity "Recycle Bin Feature" \-Scope ForestOrConfigurationSet \-Target "final.local"
 
-![AD Recycle Bin enabled in ADAC]()
 ![Image Alt](Snapshots/13.PNG)
 
 ---
 
 ---
 
-## 17\. Join a Client Machine to the Domain
+## 16\. Join a Client Machine to the Domain
 
 **Goal:** A Windows client PC joins `FINAL.LOCAL`.
 
@@ -381,11 +363,10 @@ Verify from another machine via `http://192.168.1.3`.
 3. Enter domain admin credentials when prompted.  
 4. Restart when prompted, then log in with a domain account to confirm.
 
-![Client PC joined to FINAL.LOCAL]()  
 ![Image Alt](Snapshots/14.PNG)
 ---
 
-## 20\. Daily Full Server Backup to ADC
+## 17\. Daily Full Server Backup to ADC
 
 **Goal:** A full backup of the main server (PDC) runs every day at 11:00 PM, with the backup stored on ADC.
 
@@ -406,18 +387,7 @@ Verify from another machine via `http://192.168.1.3`.
 7. Complete the wizard and verify the first scheduled run completes successfully (check *Windows Server Backup → Status*, or Event Viewer).
 
 ![Image Alt](Snapshots/12.PNG)
-![Windows Server Backup schedule configuration]()
 
 ---
-
-## Repo Structure
-
-├── README.md              \# This file — full step-by-step lab guide
-
-├── TROUBLESHOOTING.md      \# Real issues hit during the build and how they were diagnosed/fixed
-
-└── images/                 \# Screenshots referenced above (add your own)
-
-See [`TROUBLESHOOTING.md`](http://./TROUBLESHOOTING.md) for real debugging scenarios encountered while building this lab.  
 
 
