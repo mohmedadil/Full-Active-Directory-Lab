@@ -105,7 +105,7 @@ Adjust these to match your own environment if different — they're referenced c
    
 
 ![Users and groups inside the HR OU]()  
-![][image1]  
+![Image Alt](Snapshots/1.PNG)
 ---
 
 ## 4\. Configure Password Policy
